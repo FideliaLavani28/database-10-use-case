@@ -35,17 +35,13 @@ FROM RentalDetail rd JOIN RentalHeader rh ON rd.RentalID=rh.RentalID
 WHERE DATENAME(MONTH,RentalDate)='November'
 GROUP BY DATENAME(MONTH,RentalDate)
 
---5.	Display unique MovieID (obtained by separating the MovieID’s letters and numbers with a whitespace), and the MovieTitle for every movie which genres are either Action or Adventure.
+--5.	Display unique MovieID (obtained by separating the MovieIDâ€™s letters and numbers with a whitespace), and the MovieTitle for every movie which genres are either Action or Adventure.
 --(distinct, stuff, in)
 SELECT DISTINCT [MovieID]=STUFF(mg.MovieID,3,0,' '), MovieTitle
 FROM Movies m JOIN MovieGenre mg ON m.MovieID=mg.MovieID JOIN Genres g ON g.GenreID=mg.GenreID
-WHERE GenreName IN (
-	SELECT GenreName 
-	FROM Genres 
-	WHERE GenreName IN ('Action','Adventure')
-)
+WHERE GenreName IN ('Action','Adventure')
 
---6.	Display UserID and UserName (in capital letters) for every user which average rental duration is above all user’s average rental duration. Make sure that the data shown is not redundant.
+--6.	Display UserID and UserName (in capital letters) for every user which average rental duration is above all userâ€™s average rental duration. Make sure that the data shown is not redundant.
 --(alias subquery, distinct, upper, having, avg)
 SELECT DISTINCT rh.UserID, [UserName]=UPPER(UserName), Duration
 FROM Users u JOIN RentalHeader rh ON u.UserID=rh.UserID JOIN RentalDetail rd ON rd.RentalID=rh.RentalID,(
@@ -54,7 +50,7 @@ FROM Users u JOIN RentalHeader rh ON u.UserID=rh.UserID JOIN RentalDetail rd ON 
 )x
 WHERE x.AvgDuration<Duration
 
---7.	Create a view named ‘Two Words Titled Movie’ that displays all MovieID, MovieTitle, and MovieSummary for every movie which title contains min 2 words and director is unknown(null).
+--7.	Create a view named â€˜Two Words Titled Movieâ€™ that displays all MovieID, MovieTitle, and MovieSummary for every movie which title contains min 2 words and director is unknown(null).
 --(create view, charindex, is null)
 CREATE VIEW [Two Words Titled Movie]
 AS
@@ -62,7 +58,7 @@ SELECT MovieID, MovieTitle, MovieSummary
 FROM Movies
 WHERE MovieDirector IS NULL AND CHARINDEX(' ',MovieTitle)>1
 
---8.	Create a view named ‘Not Returned Movie Count’ that displays MovieTitle and Rented Out Count (obtained from the total of movie rented and not yet returned) for every show which is rented out count more than 1. 
+--8.	Create a view named â€˜Not Returned Movie Countâ€™ that displays MovieTitle and Rented Out Count (obtained from the total of movie rented and not yet returned) for every show which is rented out count more than 1. 
 --(create view, count, like, having)
 CREATE VIEW [Not Returned Movie Count]
 AS
@@ -72,7 +68,7 @@ WHERE Status LIKE 'Not Returned'
 GROUP BY MovieTitle
 HAVING COUNT([Status])>1
 
---9.	Add a column to Movie table named ‘MovieRating’ with data type of VARCHAR (10). After that, add a constraint to check that MovieRating can only be filled with ‘R’ or ‘PG’ or ‘Not Rated’.
+--9.	Add a column to Movie table named â€˜MovieRatingâ€™ with data type of VARCHAR (10). After that, add a constraint to check that MovieRating can only be filled with â€˜Râ€™ or â€˜PGâ€™ or â€˜Not Ratedâ€™.
 --(add, add constraint, in)
 ALTER TABLE Movie
 ADD MovieRating varchar(10)
@@ -80,7 +76,7 @@ ADD MovieRating varchar(10)
 ALTER TABLE Movie
 ADD CONSTRAINT CheckMovieRating CHECK(MovieRating IN ('R','PG','Not Rated'))
 
---10.	Update User’s status to ‘Banned’ if the user has a rental that is not yet returned, and the expected return date is before November 15th, 2021.
+--10.	Update Userâ€™s status to â€˜Bannedâ€™ if the user has a rental that is not yet returned, and the expected return date is before November 15th, 2021.
 --(update, dateadd, like)
 --BEGIN TRAN
 UPDATE Users
